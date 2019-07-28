@@ -40,6 +40,7 @@
     <Content Include="files\emails.txt" />
     <Content Include="files\content.txt" />
     <Content Include="files\Ganze_Timeline.pdf" />
+    <Content Include="files\config.txt" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
