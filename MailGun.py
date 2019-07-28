@@ -1,13 +1,26 @@
 import requests
 
-def send_complex_message(subject, address, content, attachment):
+def send_complex_message(subject, address, content, attachment, api_key):
     return requests.post("https://api.mailgun.net/v3/mg.jkusdachurch.org/messages",
-        auth=("api", "key-61cdc7861e0d1365aa4e91dafb5ba6b4"),
+        auth=("api", api_key),
         files=[("attachment", ("Ganze Timeline.pdf", attachment))],
         data={"from": "JKUSDA Personal Ministries <pm@jkusdachurch.org>",
               "to": address,
               "subject": subject,
               "text": content})
+
+def send_emails(addresses, contents, attachment):
+    file = open("files/config.txt", "r")
+    api_key = file.read()
+    file.close
+    responses = []
+    for i in range(len(addresses)):
+        if(addresses[i].find("students") == -1 & addresses[i].find("jkusda") == -1):
+            print("Sending to " + addresses[i])
+            response = send_complex_message("Another", addresses[i], contents[i], attachment, api_key)
+            print("Sent!")
+            responses.append(response)
+    return responses
 
 def get_addresses():
     file = open("files/emails.txt","r")
@@ -39,13 +52,6 @@ def get_attachment():
     attachment = file.read()
     file.close
     return attachment
-
-def send_emails(addresses, contents, attachment):
-    responses = []
-    for i in range(len(addresses)):
-        if(addresses[i].find("students") == -1 & addresses[i].find("jkusda") == -1):
-            responses.append(send_complex_message("Another", addresses[i],contents[i],attachment))
-    return responses
 
 def log_responses(responses):
     file = open("files/log.txt","a")
